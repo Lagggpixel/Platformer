@@ -18,8 +18,7 @@ public class Player extends Entity {
     protected final float playerSpeed = 4;
     protected final int animationSpeed = 2;
     private int[][] lvlData;
-    private final float xDrawOffset = 21 * GameConstants.scale;
-    private final float yDrawOffset = 4 * GameConstants.scale;
+    protected final float xDrawOffset = 21 * GameConstants.scale, yDrawOffset = 4 * GameConstants.scale;
 
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
