@@ -1,25 +1,30 @@
 package me.lagggpixel.platformerTutorial.entities;
 
+import me.lagggpixel.platformerTutorial.utils.HelperMethods;
+import me.lagggpixel.platformerTutorial.utils.LoadSave;
+import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
 import me.lagggpixel.platformerTutorial.utils.enums.PlayerStatus;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 
-public class Player extends Entity{
+public class Player extends Entity {
 
     private BufferedImage[][] animations;
-    private int animationTick, animationIndex, animationSpeed = 2;
+    private int animationTick, animationIndex;
     private PlayerStatus playerAction = PlayerStatus.IDLE;
     private boolean up, down, left, right;
     private boolean moving = false, attacking = false;
-    private float playerSpeed = 4;
+    protected final float playerSpeed = 4;
+    protected final int animationSpeed = 2;
+    private int[][] lvlData;
+    private final float xDrawOffset = 21 * GameConstants.scale;
+    private final float yDrawOffset = 4 * GameConstants.scale;
 
-    public Player(float x, float y) {
-        super(x, y);
+    public Player(float x, float y, int width, int height) {
+        super(x, y, width, height);
         loadAnimations();
+        initHitBox(x, y, (int) (20*GameConstants.scale), (int) (28*GameConstants.scale));
     }
 
     public void update() {
@@ -29,34 +34,52 @@ public class Player extends Entity{
     }
 
     public void render(Graphics g) {
-        g.drawImage(animations[playerAction.getSpiritAmount()][animationIndex], (int) x, (int) y, 128, 80, null);
+        g.drawImage(animations[playerAction.index()][animationIndex], (int) (hitBox.x - xDrawOffset), (int) (hitBox.y - yDrawOffset), width, height, null);
     }
 
     public void setMoving(boolean moving) {
         this.moving = moving;
     }
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+
 
     private void updatePosition() {
 
         moving = false;
 
+        if (!left && !right && !up && !down) {
+            return;
+        }
+
+        float xSpeed = 0, ySpeed = 0;
+
         if (left && !right) {
-            x -= playerSpeed;
-            moving = true;
+            xSpeed = -playerSpeed;
         } else if (right && !left) {
-            x += playerSpeed;
-            moving = true;
+            xSpeed = playerSpeed;
         }
 
         if (up && !down) {
-            y -= playerSpeed;
-            moving = true;
+            ySpeed = -playerSpeed;
         } else if (down && !up) {
-            y += playerSpeed;
+            ySpeed = playerSpeed;
+        }
+
+        if (HelperMethods.canMoveHere(hitBox.x + xSpeed, hitBox.y+ ySpeed, hitBox.width, hitBox.height, lvlData)) {
+            hitBox.x += xSpeed;
+            hitBox.y += ySpeed;
             moving = true;
         }
     }
 
+    /**
+     * Updates the animation tick and advances the animation index once the animation tick
+     * reaches the animation speed. If the animation index reaches the maximum spirit amount
+     * of the player's action, it resets the animation index to 0. If the player is currently
+     * attacking, it sets the attacking flag to false.
+     */
     private void updateAnimationTick() {
         animationTick++;
         if (animationTick >= animationSpeed) {
@@ -64,7 +87,6 @@ public class Player extends Entity{
             animationIndex++;
             if (animationIndex >= playerAction.getSpiritAmount()) {
                 animationIndex = 0;
-
                 if (attacking) {
                     attacking = false;
                 }
@@ -72,17 +94,19 @@ public class Player extends Entity{
         }
     }
 
+    /**
+     * Sets the animation for the player based on their current status.
+     */
     private void setAnimation() {
 
         PlayerStatus initialAnimation = playerAction;
 
+
         if (moving) {
             playerAction = PlayerStatus.RUNNING;
-        }
-        else if (attacking) {
+        } else if (attacking) {
             playerAction = PlayerStatus.ATTACK_1;
-        }
-        else {
+        } else {
             playerAction = PlayerStatus.IDLE;
         }
 
@@ -92,33 +116,28 @@ public class Player extends Entity{
         }
     }
 
-
+    /**
+     * Loads the animations for the player.
+     */
     private void loadAnimations() {
-        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
-        try {
-            assert is != null;
-            BufferedImage image = ImageIO.read(is);
+        BufferedImage image = LoadSave.getSpritesAtlas(LoadSave.PLAYER_ATLAS);
 
-            animations = new BufferedImage[9][6];
+        animations = new BufferedImage[9][6];
 
-            for (int i = 0; i < animations.length; i++) {
-                for (int j = 0; j < animations[i].length; j++) {
-                    animations[i][j] = image.getSubimage(j * 64, i * 40, 64, 40);
-                }
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            // close import stream
-            try {
-                is.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        for (int i = 0; i < animations.length; i++) {
+            for (int j = 0; j < animations[i].length; j++) {
+                animations[i][j] = image.getSubimage(j * 64, i * 40, 64, 40);
             }
         }
-
     }
 
+    public void loadLvlData(int[][] lvlData) {
+        this.lvlData = lvlData;
+    }
+
+    /**
+     * Resets the boolean variables for the directions of the player.
+     */
     public void resetDirBooleans() {
         this.up = false;
         this.down = false;
@@ -160,9 +179,5 @@ public class Player extends Entity{
 
     public boolean isAttacking() {
         return attacking;
-    }
-
-    public void setAttacking(boolean attacking) {
-        this.attacking = attacking;
     }
 }

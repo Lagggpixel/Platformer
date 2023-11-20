@@ -14,5 +14,4 @@ public class Logger {
 
         System.out.println("[" + dtf.format(dateTime) + " " + level.toString() + "]: " + message);
     }
-
 }

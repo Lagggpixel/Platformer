@@ -1,24 +1,21 @@
 package me.lagggpixel.platformerTutorial;
 
 import me.lagggpixel.platformerTutorial.entities.Player;
+import me.lagggpixel.platformerTutorial.levels.LevelManager;
 import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
 
 import java.awt.*;
 
-public class Game implements Runnable{
+public class Game {
 
-    // Instance
-    private static Game INSTANCE;
-
-    private final GameWindow gameWindow;
-    private final GamePanel gamePanel;
-    private Thread gameThread;
+    protected final GameWindow gameWindow;
+    protected final GamePanel gamePanel;
+    protected Thread gameThread;
 
     private Player player;
+    private LevelManager levelManager;
 
     public Game() {
-        INSTANCE = this;
-
         initClasses();
 
         this.gamePanel = new GamePanel(this);
@@ -32,67 +29,24 @@ public class Game implements Runnable{
     }
 
     private void initClasses() {
-        player = new Player(200, 200);
+        levelManager = new LevelManager(this);
+        player = new Player(200, 200, (int) (64 * GameConstants.scale), (int) (40 * GameConstants.scale));
+        player.loadLvlData(levelManager.getCurrentLvlData().getLvlData());
     }
 
     private void startGameLoop() {
-        gameThread = new Thread(this);
+        gameThread = new Thread(new GameThread(this));
         gameThread.start();
     }
 
     public void update() {
         player.update();
+        levelManager.update();
     }
 
     public void render(Graphics g) {
+        levelManager.render(g);
         player.render(g);
-    }
-
-    public static Game getInstance() {
-        return INSTANCE;
-    }
-
-    @Override
-    public void run() {
-        double timePerFrame = 1000000000.0 / GameConstants.fps;
-        double timePerUpdate = 1000000000.0 / GameConstants.tps;
-
-        long previousTime = System.nanoTime();
-
-        int frames = 0;
-        int updates = 0;
-        long lastCheck = System.currentTimeMillis();
-
-        double deltaU = 0;
-        double deltaF = 0;
-
-        while (true) {
-            long currentTime = System.nanoTime();
-
-            deltaU += (currentTime - previousTime) / timePerUpdate;
-            deltaF += (currentTime - previousTime) / timePerFrame;
-            previousTime = currentTime;
-
-            if (deltaU >= 1) {
-                update();
-                updates++;
-                deltaU--;
-            }
-
-            if (deltaF >= 1) {
-                gamePanel.repaint();
-                frames++;
-                deltaF--;
-            }
-
-            if (System.currentTimeMillis() - lastCheck >= 1000) {
-                lastCheck = System.currentTimeMillis();
-                System.out.println("FPS: " + frames + " | UPS: " + updates);
-                frames = 0;
-                updates = 0;
-
-            }
-        }
     }
 
     public Player getPlayer() {
