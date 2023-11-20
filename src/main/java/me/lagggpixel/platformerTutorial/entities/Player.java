@@ -69,7 +69,9 @@ public class Player extends Entity {
         if (HelperMethods.canMoveHere(hitBox.x + xSpeed, hitBox.y+ ySpeed, hitBox.width, hitBox.height, lvlData)) {
             hitBox.x += xSpeed;
             hitBox.y += ySpeed;
-            moving = true;
+            if (xSpeed != 0 || ySpeed != 0) {
+                moving = true;
+            }
         }
     }
 
