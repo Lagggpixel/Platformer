@@ -6,7 +6,7 @@ import java.awt.event.WindowFocusListener;
 
 public class GameWindow extends JFrame {
 
-    private final JFrame jFrame;
+    protected final JFrame jFrame;
 
     public GameWindow(GamePanel gamePanel) {
         this.jFrame = new JFrame();
@@ -14,6 +14,8 @@ public class GameWindow extends JFrame {
         this.jFrame.add(gamePanel);
         this.jFrame.pack();
         this.jFrame.setResizable(false);
+
+        this.jFrame.setTitle("Platformer");
 
         this.jFrame.setLocationRelativeTo(null);
 

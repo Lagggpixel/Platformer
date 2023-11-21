@@ -3,7 +3,6 @@ package me.lagggpixel.platformerTutorial.gameStates.impl;
 import me.lagggpixel.platformerTutorial.Game;
 import me.lagggpixel.platformerTutorial.entities.Player;
 import me.lagggpixel.platformerTutorial.gameStates.State;
-import me.lagggpixel.platformerTutorial.gameStates.enums.GameState;
 import me.lagggpixel.platformerTutorial.gameStates.interfaces.StateMethods;
 import me.lagggpixel.platformerTutorial.levels.LevelManager;
 import me.lagggpixel.platformerTutorial.ui.PauseOverlay;
@@ -18,7 +17,7 @@ public class Playing extends State implements StateMethods {
     private Player player;
     private LevelManager levelManager;
     private PauseOverlay pauseOverlay;
-    private boolean paused;
+    private boolean paused = false;
 
     public Playing(Game game) {
         super(game);
@@ -128,8 +127,8 @@ public class Playing extends State implements StateMethods {
                 player.setJump(true);
                 break;
             }
-            case KeyEvent.VK_BACK_SPACE -> {
-                GameState.state = GameState.MENU;
+            case KeyEvent.VK_ESCAPE -> {
+                paused = !paused;
             }
             default -> {
                 return;
@@ -162,5 +161,9 @@ public class Playing extends State implements StateMethods {
                 return;
             }
         }
+    }
+
+    public void unPauseGame() {
+        paused = false;
     }
 }

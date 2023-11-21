@@ -8,20 +8,10 @@ public class HelperMethods {
 
     public static boolean canMoveHere(float x, float y, float width, float height, int[][] lvlData) {
 
-        if (isSolid(x, y, lvlData)) {
-            return false;
-        }
-        if (isSolid(x + width, y, lvlData)) {
-            return false;
-        }
-        if (isSolid(x, y + height, lvlData)) {
-            return false;
-        }
-        if (isSolid(x + width, y + height, lvlData)) {
-            return false;
-        }
-
-        return true;
+        return !isSolid(x, y, lvlData)
+                && !isSolid(x + width, y, lvlData)
+                && !isSolid(x, y + height, lvlData)
+                && !isSolid(x + width, y + height, lvlData);
 
     }
 

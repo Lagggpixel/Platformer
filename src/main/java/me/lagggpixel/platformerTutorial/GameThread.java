@@ -23,6 +23,7 @@ public class GameThread implements Runnable{
         double deltaU = 0;
         double deltaF = 0;
 
+        //noinspection InfiniteLoopStatement
         while (true) {
             long currentTime = System.nanoTime();
 
