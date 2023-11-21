@@ -9,4 +9,9 @@ public class UIConstants {
         public static final int B_HEIGHT = (int) (B_HEIGHT_DEFAULT * GameConstants.scale);
     }
 
+    public static class PauseButtons {
+        public static final int SOUND_SIZE_DEFAULT = 42;
+
+        public static final int SOUND_SIZE = (int) (42 * GameConstants.scale);
+    }
 }

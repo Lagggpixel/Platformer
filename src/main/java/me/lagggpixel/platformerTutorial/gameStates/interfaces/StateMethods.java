@@ -7,16 +7,17 @@ import java.awt.event.MouseEvent;
 public interface StateMethods {
 
     // Tick update
-    public void update();
+    void update();
     // Render
-    public void render(Graphics g);
+    void render(Graphics g);
     // Mouse inputs
-    public void mouseClicked(MouseEvent e);
-    public void mousePressed(MouseEvent e);
-    public void mouseReleased(MouseEvent e);
-    public void mouseMoved(MouseEvent e);
+    void mouseClicked(MouseEvent e);
+    void mousePressed(MouseEvent e);
+    void mouseReleased(MouseEvent e);
+    void mouseMoved(MouseEvent e);
+    void mouseDragged(MouseEvent e);
     // Keyboard inputs
-    public void keyPressed(KeyEvent e);
-    public void keyReleased(KeyEvent e);
+    void keyPressed(KeyEvent e);
+    void keyReleased(KeyEvent e);
 
 }

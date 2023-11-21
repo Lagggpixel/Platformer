@@ -22,9 +22,9 @@ public class Player extends Entity {
     // Jumping & gravity
     private float airSpeed = 1f;
     private boolean jump;
-    private float gravity = 4f * GameConstants.scale;
-    private float jumpSpeed = -25f * GameConstants.scale;
-    private float fallSpeedAfterCollision = 5f * GameConstants.scale;
+    protected final float gravity = 4f * GameConstants.scale;
+    protected final float jumpSpeed = -25f * GameConstants.scale;
+    protected final float fallSpeedAfterCollision = 5f * GameConstants.scale;
     private boolean inAir = false;
 
     public Player(float x, float y, int width, int height) {

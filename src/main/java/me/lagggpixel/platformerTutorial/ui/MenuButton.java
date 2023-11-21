@@ -19,7 +19,7 @@ public class MenuButton {
 
     private Rectangle bounds;
 
-    private int xOffsetCentre = UIConstants.Buttons.B_WIDTH /2;
+    private final int xOffsetCentre = UIConstants.Buttons.B_WIDTH /2;
     public MenuButton(int x, int y, int rowIndex, GameState state) {
         this.x = x;
         this.y = y;
