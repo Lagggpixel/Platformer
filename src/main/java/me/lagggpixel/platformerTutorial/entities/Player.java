@@ -16,7 +16,7 @@ public class Player extends Entity {
     private boolean up, down, left, right;
     private boolean moving = false, attacking = false;
     protected final float playerSpeed = 8f * GameConstants.SCALE;
-    protected final int animationSpeed = 1;
+    protected final int animationSpeed = 3;
     private int[][] lvlData;
     protected final float xDrawOffset = 21 * GameConstants.SCALE, yDrawOffset = 4 * GameConstants.SCALE;
     // Jumping & gravity

@@ -7,11 +7,14 @@ import me.lagggpixel.platformerTutorial.gameStates.interfaces.StateMethods;
 import me.lagggpixel.platformerTutorial.levels.LevelManager;
 import me.lagggpixel.platformerTutorial.ui.PauseOverlay;
 import me.lagggpixel.platformerTutorial.utils.LoadSave;
+import me.lagggpixel.platformerTutorial.utils.constants.Environment;
 import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.util.Random;
 
 public class Playing extends State implements StateMethods {
 
@@ -27,9 +30,21 @@ public class Playing extends State implements StateMethods {
     private final int maxTilesOffset = levelTilesWide - GameConstants.TILES_IN_WIDTH;
     private final int maxLevelOffsetX = maxTilesOffset *  GameConstants.TILE_SIZE;
 
+    private BufferedImage backgroundImage, bigClouds, smallClouds;
+    private int[] smallCloudsPositions;
+    private Random random = new Random();
+
     public Playing(Game game) {
         super(game);
         initClasses();
+
+        backgroundImage = LoadSave.getSpritesAtlas(LoadSave.PLAYING_BACKGROUND_IMAGE);
+        bigClouds = LoadSave.getSpritesAtlas(LoadSave.BIG_CLOUDS);
+        smallClouds = LoadSave.getSpritesAtlas(LoadSave.SMALL_CLOUDS);
+        smallCloudsPositions = new int[8];
+        for (int i = 0; i < smallCloudsPositions.length; i++) {
+            smallCloudsPositions[i] = (int) (90 * GameConstants.SCALE + random.nextInt((int) (100 * GameConstants.SCALE)));
+        }
     }
 
     private void initClasses() {
@@ -83,6 +98,10 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void render(Graphics g) {
+        g.drawImage(backgroundImage, 0, 0, GameConstants.WIDTH, GameConstants.HEIGHT, null);
+
+        drawClouds(g, xLevelOffset);
+
         levelManager.render(g, xLevelOffset);
         player.render(g, xLevelOffset);
 
@@ -90,6 +109,15 @@ public class Playing extends State implements StateMethods {
             g.setColor(new Color(0, 0, 0, 150));
             g.fillRect(0, 0, GameConstants.WIDTH, GameConstants.HEIGHT);
             pauseOverlay.render(g);
+        }
+    }
+
+    private void drawClouds(Graphics g, int xLevelOffset) {
+        for (int i = 0; i < 3; i++) {
+            g.drawImage(bigClouds, i * Environment.BIG_CLOUD_WIDTH - ((int) (0.3 * xLevelOffset)), (int) (204 * GameConstants.SCALE), Environment.BIG_CLOUD_WIDTH, Environment.BIG_CLOUD_HEIGHT, null);
+        }
+        for (int i = 0; i < smallCloudsPositions.length; i++) {
+            g.drawImage(smallClouds, Environment.SMALL_CLOUD_WIDTH * 4 * i - ((int) (0.7 * xLevelOffset)), smallCloudsPositions[i], Environment.SMALL_CLOUD_WIDTH, Environment.SMALL_CLOUD_HEIGHT, null);
         }
     }
 

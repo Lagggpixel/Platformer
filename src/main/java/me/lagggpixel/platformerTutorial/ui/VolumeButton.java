@@ -34,10 +34,10 @@ public class VolumeButton extends PauseButton {
         for (int i = 0; i < images.length; i++) {
             images[i] = tempImage.getSubimage
                     (i * UIConstants.VolumeButtons.VOLUME_WIDTH_DEFAULT, 0,
-                            UIConstants.VolumeButtons.VOLUME_WIDTH, UIConstants.VolumeButtons.VOLUME_HEIGHT);
+                            UIConstants.VolumeButtons.VOLUME_WIDTH_DEFAULT, UIConstants.VolumeButtons.VOLUME_HEIGHT_DEFAULT);
         }
         slider = tempImage.getSubimage(3*UIConstants.VolumeButtons.VOLUME_WIDTH_DEFAULT, 0,
-                UIConstants.VolumeButtons.SLIDER_WIDTH_DEFAULT, UIConstants.VolumeButtons.VOLUME_HEIGHT);
+                UIConstants.VolumeButtons.SLIDER_WIDTH_DEFAULT, UIConstants.VolumeButtons.VOLUME_HEIGHT_DEFAULT);
     }
 
     public void update() {

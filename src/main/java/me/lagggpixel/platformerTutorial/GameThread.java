@@ -4,6 +4,8 @@ import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
 
 public class GameThread implements Runnable{
     private final Game game;
+    public static int fps = 0;
+    public static int tps = 0;
 
     public GameThread(Game game) {
         this.game = game;
@@ -44,12 +46,20 @@ public class GameThread implements Runnable{
             }
 
             if (System.currentTimeMillis() - lastCheck >= 1000) {
+                fps = frames;
+                tps = updates;
                 lastCheck = System.currentTimeMillis();
-                System.out.println("FPS: " + frames + " | UPS: " + updates);
                 frames = 0;
                 updates = 0;
-
             }
         }
+    }
+
+    public static int getFps() {
+        return fps;
+    }
+
+    public static int getTps() {
+        return tps;
     }
 }

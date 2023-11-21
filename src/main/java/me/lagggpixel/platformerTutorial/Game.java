@@ -66,6 +66,11 @@ public class Game {
                 System.exit(0);
                 break;
         }
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 30));
+        g.drawString("FPS: " + GameThread.getFps(), 10, 30);
+        g.drawString("TPS: " + GameThread.getTps(), 10, 60);
     }
 
     public void windowFocusLost() {

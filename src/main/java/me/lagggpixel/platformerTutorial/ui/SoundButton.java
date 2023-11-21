@@ -26,7 +26,7 @@ public class SoundButton extends PauseButton{
             for (int i = 0; i < soundImages[j].length; i++) {
                 soundImages[j][i] = tempImage.getSubimage
                         (i * UIConstants.PauseButtons.SOUND_SIZE_DEFAULT, j * UIConstants.PauseButtons.SOUND_SIZE_DEFAULT,
-                        UIConstants.PauseButtons.SOUND_SIZE, UIConstants.PauseButtons.SOUND_SIZE);
+                        UIConstants.PauseButtons.SOUND_SIZE_DEFAULT, UIConstants.PauseButtons.SOUND_SIZE_DEFAULT);
             }
         }
     }
