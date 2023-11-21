@@ -15,22 +15,22 @@ public class Player extends Entity {
     private PlayerStatus playerAction = PlayerStatus.IDLE;
     private boolean up, down, left, right;
     private boolean moving = false, attacking = false;
-    protected final float playerSpeed = 8f * GameConstants.scale;
+    protected final float playerSpeed = 8f * GameConstants.SCALE;
     protected final int animationSpeed = 1;
     private int[][] lvlData;
-    protected final float xDrawOffset = 21 * GameConstants.scale, yDrawOffset = 4 * GameConstants.scale;
+    protected final float xDrawOffset = 21 * GameConstants.SCALE, yDrawOffset = 4 * GameConstants.SCALE;
     // Jumping & gravity
     private float airSpeed = 1f;
     private boolean jump;
-    protected final float gravity = 4f * GameConstants.scale;
-    protected final float jumpSpeed = -25f * GameConstants.scale;
-    protected final float fallSpeedAfterCollision = 5f * GameConstants.scale;
+    protected final float gravity = 4f * GameConstants.SCALE;
+    protected final float jumpSpeed = -25f * GameConstants.SCALE;
+    protected final float fallSpeedAfterCollision = 5f * GameConstants.SCALE;
     private boolean inAir = false;
 
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
         loadAnimations();
-        initHitBox(x, y, (int) (20*GameConstants.scale), (int) (27*GameConstants.scale));
+        initHitBox(x, y, (int) (20*GameConstants.SCALE), (int) (27*GameConstants.SCALE));
     }
 
     public void update() {
@@ -39,9 +39,9 @@ public class Player extends Entity {
         setAnimation();
     }
 
-    public void render(Graphics g) {
+    public void render(Graphics g, int xLevelOffset) {
         // drawHitBox(g);
-        g.drawImage(animations[playerAction.index()][animationIndex], (int) (hitBox.x - xDrawOffset), (int) (hitBox.y - yDrawOffset), width, height, null);
+        g.drawImage(animations[playerAction.index()][animationIndex], (int) (hitBox.x - xDrawOffset) - xLevelOffset, (int) (hitBox.y - yDrawOffset), width, height, null);
     }
 
     public void setMoving(boolean moving) {

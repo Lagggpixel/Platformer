@@ -70,12 +70,14 @@ public class Game {
 
     public void windowFocusLost() {
         if (GameState.state == GameState.PLAYING) {
-            playing.getPlayer().resetDirBooleans();
+            playing.windowFocusLost();
         }
     }
 
     public void windowFocusGained() {
-
+        if (GameState.state == GameState.PLAYING) {
+            playing.windowFocusGained();
+        }
     }
 
     public Menu getMenu() {

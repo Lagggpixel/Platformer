@@ -11,8 +11,8 @@ public class GameThread implements Runnable{
 
     @Override
     public void run() {
-        double timePerFrame = 1000000000.0 / GameConstants.fps;
-        double timePerUpdate = 1000000000.0 / GameConstants.tps;
+        double timePerFrame = 1000000000.0 / GameConstants.FPS;
+        double timePerUpdate = 1000000000.0 / GameConstants.TPS;
 
         long previousTime = System.nanoTime();
 

@@ -9,14 +9,14 @@ import java.awt.image.BufferedImage;
 
 public class LevelManager {
 
-    private final Game game;
+    protected final Game game;
     private BufferedImage[] levelSprite;
-    private Level levelOne;
+    private final Level level;
 
     public LevelManager(Game game) {
         this.game = game;
         importOutsideSprites();
-        levelOne = new Level(LoadSave.getLevelData());
+        level = new Level(LoadSave.getLevelData());
     }
 
     private void importOutsideSprites() {
@@ -33,19 +33,19 @@ public class LevelManager {
     public void update() {
     }
 
-    public void render(Graphics g) {
-        for (int j=0; j< GameConstants.tiles_in_height; j++) {
-            for (int i=0; i< GameConstants.tiles_in_width; i++) {
-                int index = levelOne.getSpriteIndex(i, j);
+    public void render(Graphics g, int xLevelOffset) {
+        for (int j = 0; j< GameConstants.TILES_IN_HEIGHT; j++) {
+            for (int i = 0; i< level.getLvlData()[0].length; i++) {
+                int index = level.getSpriteIndex(i, j);
                 g.drawImage(levelSprite[index],
-                        i*GameConstants.tile_size, j*GameConstants.tile_size,
-                        GameConstants.tile_size, GameConstants.tile_size,
+                        i*GameConstants.TILE_SIZE -xLevelOffset, j*GameConstants.TILE_SIZE,
+                        GameConstants.TILE_SIZE, GameConstants.TILE_SIZE,
                         null);
             }
         }
     }
 
     public Level getCurrentLvlData() {
-        return levelOne;
+        return level;
     }
 }

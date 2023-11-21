@@ -1,7 +1,5 @@
 package me.lagggpixel.platformerTutorial.utils;
 
-import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,6 +14,8 @@ public class LoadSave {
 
     public static final String MENU_BUTTONS = "button_atlas.png";
     public static final String MENU_BACKGROUND = "menu_background.png";
+
+    public static final String MENU_BACKGROUND_IMAGE = "background_menu.png";
 
     public static final String PAUSE_BACKGROUND = "pause_background.png";
     public static final String SOUND_BUTTONS = "sound_buttons.png";
@@ -43,8 +43,8 @@ public class LoadSave {
     }
 
     public static int[][] getLevelData() {
-        int[][] lvlData = new int[GameConstants.tiles_in_height][GameConstants.tiles_in_width];
         BufferedImage image = LoadSave.getSpritesAtlas(LoadSave.LEVEL_ONE_DATA);
+        int[][] lvlData = new int[image.getHeight()][image.getWidth()];
         for (int j = 0; j < image.getHeight(); j++) {
             for (int i = 0; i < image.getWidth(); i++) {
                 int value = new Color(image.getRGB(i, j)).getRed();

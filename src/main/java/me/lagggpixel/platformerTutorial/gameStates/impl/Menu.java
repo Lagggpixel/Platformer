@@ -16,7 +16,7 @@ import java.awt.image.BufferedImage;
 public class Menu extends State implements StateMethods {
 
     private MenuButton[] buttons = new MenuButton[3];
-    private BufferedImage backgroundImage;
+    private BufferedImage backgroundImage, menuBackgroundImage;
     private int menuX, menuY, menuWidth, menuHeight;
 
     public Menu(Game game) {
@@ -26,17 +26,18 @@ public class Menu extends State implements StateMethods {
     }
 
     private void loadBackground() {
+        menuBackgroundImage = LoadSave.getSpritesAtlas(LoadSave.MENU_BACKGROUND_IMAGE);
         backgroundImage = LoadSave.getSpritesAtlas(LoadSave.MENU_BACKGROUND);
-        menuWidth = (int) (backgroundImage.getWidth() * GameConstants.scale);
-        menuHeight = (int) (backgroundImage.getHeight() * GameConstants.scale);
-        menuX = GameConstants.width / 2 - menuWidth / 2;
-        menuY = (int) (45 * GameConstants.scale);
+        menuWidth = (int) (backgroundImage.getWidth() * GameConstants.SCALE);
+        menuHeight = (int) (backgroundImage.getHeight() * GameConstants.SCALE);
+        menuX = GameConstants.WIDTH / 2 - menuWidth / 2;
+        menuY = (int) (45 * GameConstants.SCALE);
     }
 
     private void loadButtons() {
-        buttons[0] = new MenuButton(GameConstants.width / 2, (int) (150 * GameConstants.scale), 0, GameState.PLAYING);
-        buttons[1] = new MenuButton(GameConstants.width / 2, (int) (220 * GameConstants.scale), 1, GameState.OPTIONS);
-        buttons[2] = new MenuButton(GameConstants.width / 2, (int) (290 * GameConstants.scale), 2, GameState.QUIT);
+        buttons[0] = new MenuButton(GameConstants.WIDTH / 2, (int) (150 * GameConstants.SCALE), 0, GameState.PLAYING);
+        buttons[1] = new MenuButton(GameConstants.WIDTH / 2, (int) (220 * GameConstants.SCALE), 1, GameState.OPTIONS);
+        buttons[2] = new MenuButton(GameConstants.WIDTH / 2, (int) (290 * GameConstants.SCALE), 2, GameState.QUIT);
     }
 
     @Override
@@ -48,6 +49,7 @@ public class Menu extends State implements StateMethods {
 
     @Override
     public void render(Graphics g) {
+        g.drawImage(menuBackgroundImage, 0, 0, GameConstants.WIDTH, GameConstants.HEIGHT, null);
         g.drawImage(backgroundImage, menuX, menuY, menuWidth, menuHeight, null);
         for (MenuButton menuButton : buttons) {
             menuButton.render(g);

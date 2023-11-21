@@ -31,16 +31,16 @@ public class PauseOverlay {
     }
 
     private void loadVolumeButtons() {
-        int vX = (int) (309 * GameConstants.scale);
-        int vY = (int) (278 * GameConstants.scale);
+        int vX = (int) (309 * GameConstants.SCALE);
+        int vY = (int) (278 * GameConstants.SCALE);
         volumeButton = new VolumeButton(vX, vY, UIConstants.VolumeButtons.SLIDER_WIDTH, UIConstants.VolumeButtons.VOLUME_HEIGHT);
     }
 
     private void loadUrmButtons() {
-        int menuX = (int) (330 * GameConstants.scale);
-        int replayX = (int) (397 * GameConstants.scale);
-        int unpauseX = (int) (462 * GameConstants.scale);
-        int buttonY = (int) (325 * GameConstants.scale);
+        int menuX = (int) (330 * GameConstants.SCALE);
+        int replayX = (int) (397 * GameConstants.SCALE);
+        int unpauseX = (int) (462 * GameConstants.SCALE);
+        int buttonY = (int) (325 * GameConstants.SCALE);
 
         menuButton = new UrmButton(menuX, buttonY, UIConstants.URMButtons.URM_SIZE, UIConstants.URMButtons.URM_SIZE, 2);
         replayButton = new UrmButton(replayX, buttonY, UIConstants.URMButtons.URM_SIZE, UIConstants.URMButtons.URM_SIZE, 1);
@@ -48,9 +48,9 @@ public class PauseOverlay {
     }
 
     private void loadSoundButtons() {
-        int soundX = (int) (450 * GameConstants.scale);
-        int musicY = (int) (140  * GameConstants.scale);
-        int sfxY = (int) (186  * GameConstants.scale);
+        int soundX = (int) (450 * GameConstants.SCALE);
+        int musicY = (int) (140  * GameConstants.SCALE);
+        int sfxY = (int) (186  * GameConstants.SCALE);
         musicButton = new SoundButton(soundX, musicY,
                 UIConstants.PauseButtons.SOUND_SIZE, UIConstants.PauseButtons.SOUND_SIZE);
         sfxButton = new SoundButton(soundX, sfxY,
@@ -59,10 +59,10 @@ public class PauseOverlay {
 
     private void loadBackground() {
         backgroundImage = LoadSave.getSpritesAtlas(LoadSave.PAUSE_BACKGROUND);
-        bgWidth = (int) (backgroundImage.getWidth() * GameConstants.scale);
-        bgHeight = (int) (backgroundImage.getHeight() * GameConstants.scale);
-        bgX = GameConstants.width / 2 - bgWidth / 2;
-        bgY = (int) (25 * GameConstants.scale);
+        bgWidth = (int) (backgroundImage.getWidth() * GameConstants.SCALE);
+        bgHeight = (int) (backgroundImage.getHeight() * GameConstants.SCALE);
+        bgX = GameConstants.WIDTH / 2 - bgWidth / 2;
+        bgY = (int) (25 * GameConstants.SCALE);
     }
 
     public void update() {
@@ -160,7 +160,9 @@ public class PauseOverlay {
     }
 
     public void keyPressed(KeyEvent e) {
-
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            game.getPlaying().unPauseGame();
+        }
     }
 
     public void keyReleased(KeyEvent e) {
