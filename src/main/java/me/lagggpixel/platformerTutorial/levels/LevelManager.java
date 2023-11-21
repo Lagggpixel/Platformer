@@ -38,8 +38,8 @@ public class LevelManager {
             for (int i=0; i< GameConstants.tiles_in_width; i++) {
                 int index = levelOne.getSpriteIndex(i, j);
                 g.drawImage(levelSprite[index],
-                        i*GameConstants.title_size, j*GameConstants.title_size,
-                        GameConstants.title_size, GameConstants.title_size,
+                        i*GameConstants.tile_size, j*GameConstants.tile_size,
+                        GameConstants.tile_size, GameConstants.tile_size,
                         null);
             }
         }

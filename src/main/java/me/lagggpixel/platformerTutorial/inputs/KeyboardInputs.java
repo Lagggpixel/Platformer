@@ -2,6 +2,7 @@ package me.lagggpixel.platformerTutorial.inputs;
 
 
 import me.lagggpixel.platformerTutorial.GamePanel;
+import me.lagggpixel.platformerTutorial.gameStates.enums.GameState;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -20,50 +21,34 @@ public class KeyboardInputs implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> {
-                gamePanel.getPlayer().setUp(true);
+        switch (GameState.state) {
+            case MENU -> {
+                gamePanel.getGame().getMenu().keyPressed(e);
                 break;
             }
-            case KeyEvent.VK_A -> {
-                gamePanel.getPlayer().setLeft(true);
-                break;
-            }
-            case KeyEvent.VK_S -> {
-                gamePanel.getPlayer().setDown(true);
-                break;
-            }
-            case KeyEvent.VK_D -> {
-                gamePanel.getPlayer().setRight(true);
+            case PLAYING -> {
+                gamePanel.getGame().getPlaying().keyPressed(e);
                 break;
             }
             default -> {
-                return;
+                break;
             }
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_W -> {
-                gamePanel.getPlayer().setUp(false);
+        switch (GameState.state) {
+            case MENU -> {
+                gamePanel.getGame().getMenu().keyReleased(e);
                 break;
             }
-            case KeyEvent.VK_A -> {
-                gamePanel.getPlayer().setLeft(false);
-                break;
-            }
-            case KeyEvent.VK_S -> {
-                gamePanel.getPlayer().setDown(false);
-                break;
-            }
-            case KeyEvent.VK_D -> {
-                gamePanel.getPlayer().setRight(false);
+            case PLAYING -> {
+                gamePanel.getGame().getPlaying().keyReleased(e);
                 break;
             }
             default -> {
-                return;
+                break;
             }
         }
     }

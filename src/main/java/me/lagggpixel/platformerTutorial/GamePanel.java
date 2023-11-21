@@ -1,6 +1,5 @@
 package me.lagggpixel.platformerTutorial;
 
-import me.lagggpixel.platformerTutorial.entities.Player;
 import me.lagggpixel.platformerTutorial.inputs.KeyboardInputs;
 import me.lagggpixel.platformerTutorial.inputs.MouseInputs;
 import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
@@ -32,10 +31,6 @@ public class GamePanel extends JPanel {
 
     public Game getGame() {
         return game;
-    }
-
-    public Player getPlayer() {
-        return game.getPlayer();
     }
 }
     

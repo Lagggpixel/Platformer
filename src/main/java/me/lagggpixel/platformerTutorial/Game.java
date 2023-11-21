@@ -1,8 +1,8 @@
 package me.lagggpixel.platformerTutorial;
 
-import me.lagggpixel.platformerTutorial.entities.Player;
-import me.lagggpixel.platformerTutorial.levels.LevelManager;
-import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
+import me.lagggpixel.platformerTutorial.gameStates.enums.GameState;
+import me.lagggpixel.platformerTutorial.gameStates.impl.Menu;
+import me.lagggpixel.platformerTutorial.gameStates.impl.Playing;
 
 import java.awt.*;
 
@@ -10,10 +10,11 @@ public class Game {
 
     protected final GameWindow gameWindow;
     protected final GamePanel gamePanel;
-    protected Thread gameThread;
 
-    private Player player;
-    private LevelManager levelManager;
+    private Playing playing;
+    private Menu menu;
+
+    protected Thread gameThread;
 
     public Game() {
         initClasses();
@@ -29,9 +30,8 @@ public class Game {
     }
 
     private void initClasses() {
-        levelManager = new LevelManager(this);
-        player = new Player(200, 200, (int) (64 * GameConstants.scale), (int) (40 * GameConstants.scale));
-        player.loadLvlData(levelManager.getCurrentLvlData().getLvlData());
+        menu = new Menu(this);
+        playing = new Playing(this);
     }
 
     private void startGameLoop() {
@@ -40,23 +40,50 @@ public class Game {
     }
 
     public void update() {
-        player.update();
-        levelManager.update();
+        switch (GameState.state) {
+            case MENU:
+                menu.update();
+                break;
+            case PLAYING:
+                playing.update();
+                break;
+            default:
+                break;
+        }
     }
 
     public void render(Graphics g) {
-        levelManager.render(g);
-        player.render(g);
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void windowFocusGained() {
-        player.resetDirBooleans();
+        switch (GameState.state) {
+            case MENU:
+                menu.render(g);
+                break;
+            case PLAYING:
+                playing.render(g);
+                break;
+            case OPTIONS:
+            case QUIT:
+            default:
+                System.exit(0);
+                break;
+        }
     }
 
     public void windowFocusLost() {
+        if (GameState.state == GameState.PLAYING) {
+            playing.getPlayer().resetDirBooleans();
+        }
     }
+
+    public void windowFocusGained() {
+
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Playing getPlaying() {
+        return playing;
+    }
+
 }
