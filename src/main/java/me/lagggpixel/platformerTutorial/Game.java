@@ -3,6 +3,7 @@ package me.lagggpixel.platformerTutorial;
 import me.lagggpixel.platformerTutorial.gameStates.enums.GameState;
 import me.lagggpixel.platformerTutorial.gameStates.impl.Menu;
 import me.lagggpixel.platformerTutorial.gameStates.impl.Playing;
+import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
 
 import java.awt.*;
 
@@ -69,8 +70,8 @@ public class Game {
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 30));
-        g.drawString("FPS: " + GameThread.getFps(), 10, 30);
-        g.drawString("TPS: " + GameThread.getTps(), 10, 60);
+        g.drawString("FPS: " + GameThread.getFps(), (int) (GameConstants.WIDTH - 70 * GameConstants.SCALE), 30);
+        g.drawString("TPS: " + GameThread.getTps(), (int) (GameConstants.WIDTH - 70 * GameConstants.SCALE), 60);
     }
 
     public void windowFocusLost() {

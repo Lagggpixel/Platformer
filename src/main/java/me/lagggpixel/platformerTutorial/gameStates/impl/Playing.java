@@ -1,10 +1,12 @@
 package me.lagggpixel.platformerTutorial.gameStates.impl;
 
 import me.lagggpixel.platformerTutorial.Game;
+import me.lagggpixel.platformerTutorial.entities.EnemyManager;
 import me.lagggpixel.platformerTutorial.entities.Player;
 import me.lagggpixel.platformerTutorial.gameStates.State;
 import me.lagggpixel.platformerTutorial.gameStates.interfaces.StateMethods;
 import me.lagggpixel.platformerTutorial.levels.LevelManager;
+import me.lagggpixel.platformerTutorial.ui.GameOverOverlay;
 import me.lagggpixel.platformerTutorial.ui.PauseOverlay;
 import me.lagggpixel.platformerTutorial.utils.LoadSave;
 import me.lagggpixel.platformerTutorial.utils.constants.Environment;
@@ -13,6 +15,7 @@ import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -20,7 +23,9 @@ public class Playing extends State implements StateMethods {
 
     private Player player;
     private LevelManager levelManager;
+    private EnemyManager enemyManager;
     private PauseOverlay pauseOverlay;
+    private GameOverOverlay gameOverOverlay;
     private boolean paused = false;
 
     private int xLevelOffset;
@@ -33,6 +38,8 @@ public class Playing extends State implements StateMethods {
     private BufferedImage backgroundImage, bigClouds, smallClouds;
     private int[] smallCloudsPositions;
     private Random random = new Random();
+
+    private boolean gameOver = false;
 
     public Playing(Game game) {
         super(game);
@@ -49,9 +56,11 @@ public class Playing extends State implements StateMethods {
 
     private void initClasses() {
         levelManager = new LevelManager(game);
-        player = new Player(200, 200, (int) (64 * GameConstants.SCALE), (int) (40 * GameConstants.SCALE));
+        enemyManager = new EnemyManager(game);
+        player = new Player(game, 200, 200, (int) (64 * GameConstants.SCALE), (int) (40 * GameConstants.SCALE));
         player.loadLvlData(levelManager.getCurrentLvlData().getLvlData());
         pauseOverlay = new PauseOverlay(game);
+        gameOverOverlay = new GameOverOverlay(game);
     }
 
     public void windowFocusGained() {
@@ -67,12 +76,18 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void update() {
+
+        if (gameOver) {
+            return;
+        }
+
         if (paused) {
             pauseOverlay.update();
             return;
         }
 
         levelManager.update();
+        enemyManager.update(levelManager.getCurrentLvlData().getLvlData(), player);
         player.update();
         checkCloseToBorder();
     }
@@ -100,19 +115,22 @@ public class Playing extends State implements StateMethods {
     public void render(Graphics g) {
         g.drawImage(backgroundImage, 0, 0, GameConstants.WIDTH, GameConstants.HEIGHT, null);
 
-        drawClouds(g, xLevelOffset);
+        renderClouds(g, xLevelOffset);
 
         levelManager.render(g, xLevelOffset);
+        enemyManager.render(g, xLevelOffset);
         player.render(g, xLevelOffset);
 
         if (paused) {
             g.setColor(new Color(0, 0, 0, 150));
             g.fillRect(0, 0, GameConstants.WIDTH, GameConstants.HEIGHT);
             pauseOverlay.render(g);
+        } else if (gameOver) {
+            gameOverOverlay.render(g);
         }
     }
 
-    private void drawClouds(Graphics g, int xLevelOffset) {
+    private void renderClouds(Graphics g, int xLevelOffset) {
         for (int i = 0; i < 3; i++) {
             g.drawImage(bigClouds, i * Environment.BIG_CLOUD_WIDTH - ((int) (0.3 * xLevelOffset)), (int) (204 * GameConstants.SCALE), Environment.BIG_CLOUD_WIDTH, Environment.BIG_CLOUD_HEIGHT, null);
         }
@@ -121,8 +139,28 @@ public class Playing extends State implements StateMethods {
         }
     }
 
+    public void checkEnemyHit(Rectangle2D.Float attackBox) {
+        enemyManager.checkEnemyHit(attackBox);
+    }
+
+    public void resetAll() {
+        // TODO: reset player, enemy, level data
+        gameOver = false;
+        player.resetAll();
+        enemyManager.resetAllEnemies();
+    }
+
+    public void setGameOver(boolean b) {
+        this.gameOver = b;
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
+
+        if (gameOver) {
+            return;
+        }
+
         if (paused) {
             pauseOverlay.mouseClicked(e);
             return;
@@ -135,6 +173,10 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        if (gameOver) {
+            return;
+        }
+
         if (paused) {
             pauseOverlay.mousePressed(e);
             return;
@@ -143,6 +185,10 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (gameOver) {
+            return;
+        }
+
         if (paused) {
             pauseOverlay.mouseReleased(e);
             return;
@@ -151,6 +197,10 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        if (gameOver) {
+            return;
+        }
+
         if (paused) {
             pauseOverlay.mouseMoved(e);
             return;
@@ -159,6 +209,10 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        if (gameOver) {
+            return;
+        }
+
         if (paused) {
             pauseOverlay.mouseDragged(e);
             return;
@@ -167,6 +221,11 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (gameOver) {
+            gameOverOverlay.keyPressed(e);
+            return;
+        }
+
         if (paused) {
             pauseOverlay.keyPressed(e);
             return;
@@ -197,6 +256,10 @@ public class Playing extends State implements StateMethods {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if (gameOver) {
+            return;
+        }
+
         if (paused) {
             pauseOverlay.keyReleased(e);
             return;

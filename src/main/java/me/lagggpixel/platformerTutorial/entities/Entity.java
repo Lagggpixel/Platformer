@@ -20,10 +20,10 @@ public abstract class Entity {
         hitBox = new Rectangle2D.Float(x, y, width, height);
     }
 
-    protected void drawHitBox(Graphics g) {
+    protected void renderHitBox(Graphics g, int xLevelOffset) {
         // For debugging hit-boxes
         g.setColor(Color.RED);
-        g.drawRect((int) hitBox.x, (int) hitBox.y, (int) hitBox.width, (int) hitBox.height);
+        g.drawRect((int) hitBox.x - xLevelOffset, (int) hitBox.y, (int) hitBox.width, (int) hitBox.height);
     }
 
     public Rectangle2D.Float getHitBox() {
