@@ -56,6 +56,8 @@ public class Player extends Entity {
 
     private boolean attackChecked = false;
 
+    public static final int attackDamage = 100;
+
     public Player(Game game, float x, float y, int width, int height) {
         super(x, y, width, height);
 
@@ -226,7 +228,7 @@ public class Player extends Entity {
         }
         if (currentHealth <= 0) {
             currentHealth = 0;
-            // TODO - game over
+            game.getPlaying().setGameOver(true);
         }
     }
 

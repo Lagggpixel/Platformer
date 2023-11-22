@@ -144,7 +144,6 @@ public class Playing extends State implements StateMethods {
     }
 
     public void resetAll() {
-        // TODO: reset player, enemy, level data
         gameOver = false;
         player.resetAll();
         enemyManager.resetAllEnemies();

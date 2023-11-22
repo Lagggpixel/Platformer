@@ -68,8 +68,7 @@ public class EnemyManager {
         for (Crabby crabby: crabbies) {
             if (crabby.isActive()) {
                 if (attackBox.intersects(crabby.getHitBox())) {
-                    // TODO - change player damage;
-                    crabby.hurt(10);
+                    crabby.hurt(Player.attackDamage);
                     return;
                 }
             }
