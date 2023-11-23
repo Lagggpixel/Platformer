@@ -1,89 +1,91 @@
 package me.lagggpixel.platformerTutorial.utils;
 
-import me.lagggpixel.platformerTutorial.entities.Crabby;
-import me.lagggpixel.platformerTutorial.utils.constants.EnemyConstants;
-import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
-
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class LoadSave {
 
-    public static final String PLAYER_ATLAS = "player_sprites.png";
-    public static final String CRABBY_SPRITE = "crabby_sprite.png";
+  public static final String PLAYER_ATLAS = "player_sprites.png";
+  public static final String CRABBY_SPRITE = "crabby_sprite.png";
 
-    public static final String LEVEL_ATLAS = "outside_sprites.png";
-    public static final String LEVEL_ONE_DATA = "level_one_data.png";
+  public static final String LEVEL_ATLAS = "outside_sprites.png";
 
-    public static final String MENU_BUTTONS = "button_atlas.png";
-    public static final String MENU_BACKGROUND = "menu_background.png";
+  public static final String MENU_BUTTONS = "button_atlas.png";
+  public static final String MENU_BACKGROUND = "menu_background.png";
 
-    public static final String MENU_BACKGROUND_IMAGE = "background_menu.png";
+  public static final String MENU_BACKGROUND_IMAGE = "background_menu.png";
 
-    public static final String PAUSE_BACKGROUND = "pause_background.png";
-    public static final String SOUND_BUTTONS = "sound_buttons.png";
-    public static final String URM_BUTTONS = "urm_buttons.png";
-    public static final String VOLUME_BUTTONS = "volume_buttons.png";
+  public static final String PAUSE_BACKGROUND = "pause_background.png";
+  public static final String SOUND_BUTTONS = "sound_buttons.png";
+  public static final String URM_BUTTONS = "urm_buttons.png";
+  public static final String VOLUME_BUTTONS = "volume_buttons.png";
 
-    public static final String PLAYING_BACKGROUND_IMAGE = "playing_bg_img.png";
-    public static final String BIG_CLOUDS = "big_clouds.png";
-    public static final String SMALL_CLOUDS = "small_clouds.png";
+  public static final String PLAYING_BACKGROUND_IMAGE = "playing_bg_img.png";
+  public static final String BIG_CLOUDS = "big_clouds.png";
+  public static final String SMALL_CLOUDS = "small_clouds.png";
 
-    public static final String STATUS_BAR = "health_power_bar.png";
+  public static final String STATUS_BAR = "health_power_bar.png";
 
-    public static BufferedImage getSpritesAtlas(String filename) {
-        BufferedImage image;
-        InputStream is = LoadSave.class.getResourceAsStream("/" + filename);
-        try {
-            assert is != null;
-            image = ImageIO.read(is);
+  public static final String LEVEL_COMPLETED = "completed_sprite.png";
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            // close import stream
-            try {
-                is.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return image;
+
+  public static BufferedImage getSpritesAtlas(String filename) {
+    BufferedImage image;
+    InputStream is = LoadSave.class.getResourceAsStream("/" + filename);
+    try {
+      assert is != null;
+      image = ImageIO.read(is);
+
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    } finally {
+      // close import stream
+      try {
+        is.close();
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    }
+    return image;
+  }
+
+  public static BufferedImage[] getAllLevels() {
+    URL url = LoadSave.class.getResource("/lvls");
+    File file = null;
+
+    try {
+      assert url != null;
+      file = new File(url.toURI());
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
     }
 
-    public static int[][] getLevelData() {
-        BufferedImage image = LoadSave.getSpritesAtlas(LoadSave.LEVEL_ONE_DATA);
-        int[][] lvlData = new int[image.getHeight()][image.getWidth()];
-        for (int j = 0; j < image.getHeight(); j++) {
-            for (int i = 0; i < image.getWidth(); i++) {
-                int value = new Color(image.getRGB(i, j)).getRed();
-                if (value >= 48) {
-                    value = 0;
-                }
-                lvlData[j][i] = value;
-            }
-        }
-        return lvlData;
+    assert file != null;
+    File[] files = file.listFiles();
+    assert files != null;
+    File[] filesSorted = new File[files.length];
 
-    }
+    for (int i = 0; i < filesSorted.length; i++)
+      for (int j = 0; j < files.length; j++) {
+        if (files[j].getName().equals((i + 1) + ".png"))
+          filesSorted[i] = files[j];
 
-    public static ArrayList<Crabby> getCrabs() {
-        BufferedImage image = getSpritesAtlas(LEVEL_ONE_DATA);
-        ArrayList<Crabby> crabs = new ArrayList<>();
-        for (int j = 0; j < image.getHeight(); j++) {
-            for (int i = 0; i < image.getWidth(); i++) {
-                Color color = new Color(image.getRGB(i, j));
-                int value = color.getGreen();
-                if (value == EnemyConstants.CRABBY) {
-                    crabs.add(new Crabby(i * GameConstants.TILE_SIZE, j * GameConstants.TILE_SIZE));
-                }
-            }
-        }
-        return crabs;
-    }
+      }
 
+    BufferedImage[] imgs = new BufferedImage[filesSorted.length];
+
+    for (int i = 0; i < imgs.length; i++)
+      try {
+        imgs[i] = ImageIO.read(filesSorted[i]);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+    return imgs;
+  }
 }

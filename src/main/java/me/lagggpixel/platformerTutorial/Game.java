@@ -93,5 +93,4 @@ public class Game {
     public Playing getPlaying() {
         return playing;
     }
-
 }

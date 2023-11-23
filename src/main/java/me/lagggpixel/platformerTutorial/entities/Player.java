@@ -88,6 +88,13 @@ public class Player extends Entity {
         setAnimation();
     }
 
+    public void setSpawn(Point point) {
+        this.x = point.x;
+        this.y = point.y;
+        hitBox.x = this.x;
+        hitBox.y = this.y;
+    }
+
     private void checkAttack() {
         if (attackChecked || animationIndex != 1) {
             return;

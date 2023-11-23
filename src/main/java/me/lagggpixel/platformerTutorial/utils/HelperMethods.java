@@ -1,8 +1,13 @@
 package me.lagggpixel.platformerTutorial.utils;
 
+import me.lagggpixel.platformerTutorial.entities.Crabby;
+import me.lagggpixel.platformerTutorial.utils.constants.EnemyConstants;
 import me.lagggpixel.platformerTutorial.utils.constants.GameConstants;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class HelperMethods {
 
@@ -167,5 +172,68 @@ public class HelperMethods {
         } else {
             return isAllTilesWalkable(firstXTile, secondXTile, tileY, lvlData);
         }
+    }
+
+    /**
+     * Given a BufferedImage, this function converts the image into a 2D array of integers
+     * representing the level data. Each pixel in the image is converted to its red value,
+     * and if the red value is greater than or equal to 48, the corresponding element in
+     * the level data array is set to 0, otherwise it is set to the red value. The resulting
+     * 2D array is then returned.
+     *
+     * @param  image  the BufferedImage to convert to level data
+     * @return        the 2D array of integers representing the level data
+     */
+    public static int[][] getLevelData(BufferedImage image) {
+        int[][] lvlData = new int[image.getHeight()][image.getWidth()];
+        for (int j = 0; j < image.getHeight(); j++) {
+            for (int i = 0; i < image.getWidth(); i++) {
+                int value = new Color(image.getRGB(i, j)).getRed();
+                if (value >= 48) {
+                    value = 0;
+                }
+                lvlData[j][i] = value;
+            }
+        }
+        return lvlData;
+    }
+
+    /**
+     * Retrieves a list of Crabby objects from the given BufferedImage.
+     *
+     * @param  image  the BufferedImage to search for crabs
+     * @return        an ArrayList of Crabby objects found in the image
+     */
+    public static ArrayList<Crabby> getCrabs(BufferedImage image) {
+        ArrayList<Crabby> crabs = new ArrayList<>();
+        for (int j = 0; j < image.getHeight(); j++) {
+            for (int i = 0; i < image.getWidth(); i++) {
+                Color color = new Color(image.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == EnemyConstants.CRABBY) {
+                    crabs.add(new Crabby(i * GameConstants.TILE_SIZE, j * GameConstants.TILE_SIZE));
+                }
+            }
+        }
+        return crabs;
+    }
+
+    /**
+     * Get the spawn point for the player in the game.
+     *
+     * @param  image  the image to search for the spawn point
+     * @return        the spawn point coordinates as a Point object
+     */
+    public static Point getPlayerSpawn(BufferedImage image) {
+        for (int j = 0; j < image.getHeight(); j++) {
+            for (int i = 0; i < image.getWidth(); i++) {
+                Color color = new Color(image.getRGB(i, j));
+                int value = color.getGreen();
+                if (value == 100) {
+                    return new Point(i * GameConstants.TILE_SIZE, j * GameConstants.TILE_SIZE);
+                }
+            }
+        }
+        return new Point(100, 100);
     }
 }

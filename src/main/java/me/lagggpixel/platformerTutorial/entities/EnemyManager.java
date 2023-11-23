@@ -1,6 +1,7 @@
 package me.lagggpixel.platformerTutorial.entities;
 
 import me.lagggpixel.platformerTutorial.Game;
+import me.lagggpixel.platformerTutorial.levels.Level;
 import me.lagggpixel.platformerTutorial.utils.LoadSave;
 import me.lagggpixel.platformerTutorial.utils.constants.EnemyConstants;
 
@@ -20,18 +21,24 @@ public class EnemyManager {
         this.game = game;
 
         loadEnemyImages();
-        addEnemies();
     }
 
-    private void addEnemies() {
-        crabbies = LoadSave.getCrabs();
+    public void loadEnemies(Level level) {
+        crabbies = level.getCrabbies();
     }
 
     public void update(int[][] lvlData, Player player) {
+        boolean isAnyActive = false;
+
         for (Crabby c : crabbies) {
             if (c.isActive()) {
                 c.update(lvlData, player);
+                isAnyActive = true;
             }
+        }
+
+        if (!isAnyActive) {
+            game.getPlaying().setLeveCompleted(true);
         }
     }
 
